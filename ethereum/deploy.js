@@ -3,8 +3,8 @@ const Web3 = require('web3');
 const compiledFactory = require('./build/College.json');
 
 const provider = new HDWalletProvider(
-  'call glow acoustic vintage front ring trade assist shuffle mimic volume reject',
-  'https://rinkeby.infura.io/v3/3c2933d97f0f4fb2b016c5f30076c5b2'
+  'tornado drift hold side supreme either supreme nurse stem deal rack orange',
+  'https://rinkeby.infura.io/orDImgKRzwNrVCDrAk5Q'
 );
 
 const web3 = new Web3(provider);
