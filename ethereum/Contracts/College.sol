@@ -39,8 +39,30 @@ contract Wallet {
     }
 }
 
-contract createTest {
+contract TestFactory{
+    address[] myaddress;
+
+    mapping(address => string) Instructions;
+    function createwallet(string Instruction) public{
+        address newwalletaddress = new Test(msg.sender);
+        myaddress.push(newwalletaddress);
+        Instructions[newwalletaddress] = Instruction;
+    }
+    
+    function totalwallet() public view returns (address[]){
+        return myaddress;
+    }
+    
+    function totalinstruction(address add) public view returns(string){
+        return Instructions[add];
+    }
+
+}
+
+
+contract Test {
     mapping(address => bool) public attende;
+    address[] studentswallet;
     address examiner;
     string[] public Questionset;
     struct questionanswer{
@@ -51,14 +73,12 @@ contract createTest {
     uint questioncount = 0;
     
     modifier restricted() {
-        require(msg.sender == examiner);
+        require(mSsg.sender == examiner);
         _;
     }
-    function examineradd() public view returns(address){
-        return examiner;
-    }
-    function createTest() public{
-        examiner = msg.sender;
+    
+    function Test(address creator) public{
+        examiner = creator;
     }
 
     function addQuestion(string question) public restricted{
@@ -67,10 +87,11 @@ contract createTest {
     }
     
     function enrollintest(address walletaddress) public {
-        
+        require(!attende[walletaddress]);
         attende[walletaddress] = true;
-        questionanswer[] storage mytest;
+        studentswallet.push(walletaddress);
         
+        questionanswer[] storage mytest;
         for(uint i = 0; i<questioncount; i++){
             questionanswer memory newquestion = questionanswer({
                 question: Questionset[i],
@@ -86,6 +107,24 @@ contract createTest {
         questionanswer[] storage mytest = exam[walletaddress];
         mytest[index].answer = answer;
     }
+    
+    function examineradd() public view returns(address){
+        return examiner;
+    }
+    
+    function StudentsAddress() public view returns(address[]){
+        return studentswallet;
+    }
+    
+    function question(uint i) public view returns(string){
+        return Questionset[i];
+    }
+    
+    function numberofQ() public view returns(uint){
+        return questioncount;
+    }
+    
+    function sendresponse(address studentwallet,uint index) public view returns(string,string){
+        return (exam[studentwallet][index].question , exam[studentwallet][index].answer);
+    }
 }
-
-
