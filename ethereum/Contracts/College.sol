@@ -43,7 +43,7 @@ contract TestFactory{
     address[] myaddress;
 
     mapping(address => string) Instructions;
-    function createwallet(string Instruction) public{
+    function creatorTest(string Instruction) public{
         address newwalletaddress = new Test(msg.sender);
         myaddress.push(newwalletaddress);
         Instructions[newwalletaddress] = Instruction;
@@ -73,7 +73,7 @@ contract Test {
     uint questioncount = 0;
     
     modifier restricted() {
-        require(mSsg.sender == examiner);
+        require(msg.sender == examiner);
         _;
     }
     
