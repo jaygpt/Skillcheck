@@ -22,7 +22,7 @@ class CampaignNew extends Component {
           await factory.methods.creatorTest(String(this.state.instructions)).send({
             from: accounts[0]
           });
-          Router.pushRoute('/');
+          Router.pushRoute('/test/test');
         } catch (err) {
           this.setState({ errorMessage: err.message });
         }

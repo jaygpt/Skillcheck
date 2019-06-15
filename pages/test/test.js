@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Container, Button } from 'semantic-ui-react';
 import factory from '../../ethereum/factory2';
 import Layout from '../../components/Layout';
-import { Link } from '../../routes';
+import { Link, Router } from '../../routes';
 
 class CampaignIndex extends Component {
   static async getInitialProps() {
@@ -25,10 +25,11 @@ class CampaignIndex extends Component {
 
   renderCampaigns() {
     const items = this.props.Instruction.map(details => {
+      const add = details.address;
       return {
         header: details.instruction,
         description: (
-        <Link route={`/campaigns/${details.address}`}>
+        <Link route={`/test/at/${add}`}>
           <a>{details.address}</a>
         </Link>
         ),
