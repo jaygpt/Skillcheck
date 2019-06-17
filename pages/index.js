@@ -7,17 +7,30 @@ import { Link } from '../routes';
 class CampaignIndex extends Component {
   static async getInitialProps() {
     const campaigns = await factory.methods.totalwallet().call();
-
-    return { campaigns };
+    
+    const Instruction = [];
+    var i;
+    for( i = 0;i< campaigns.length;i++){
+      //console.log(campaigns[i]);
+      const name = await factory.methods.myname(campaigns[i]).call();
+      var detail = {
+        address: campaigns[i],
+        instruction: name
+      }
+      Instruction.push(detail);
+      //console.log(Instruction);
+    }
+    
+    return { campaigns , Instruction};
   }
 
   renderCampaigns() {
-    const items = this.props.campaigns.map(address => {
+    const items = this.props.Instruction.map(details => {
       return {
-        header: address,
+        header: details.instruction,
         description: (
-        <Link route={`/wallets/${address}`}>
-        <a>View Details</a>
+        <Link route={`/wallets/${details.address}`}>
+        <a>{details.address}</a>
       </Link>),
         fluid: true
       };

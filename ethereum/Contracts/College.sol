@@ -1,23 +1,28 @@
 pragma solidity ^0.4.17;
 
-contract College {
+contract College{
     address[] public students;
-    
-    function createwallet() public{
+    mapping(address => string) names;
+    function createwallet(string name) public{
         address newwallet = new Wallet(msg.sender);
         students.push(newwallet);
-        
+        names[newwallet] = name;
     }
     
     function totalwallet() public view returns (address[]){
         return students;
     }
+    function myname(address name) public view returns (string){
+        return names[name];
+    }
+
 }
 
-contract Wallet {
+contract Wallet{
     
     address public student;
     uint score;
+    uint testevaluatingscore;
     address admin;
     
     function Wallet(address creator) public{
@@ -28,14 +33,23 @@ contract Wallet {
         admin = examiner;
     }
     
-    function setscore(uint marks) public{
+    function setscoretest(uint marks) public{
         require(msg.sender == admin);
         require(admin != student);
         score = (score + marks)/2;
     }
+    function setscoreeval(uint marks) public{
+        require(msg.sender == admin);
+        require(admin != student);
+        testevaluatingscore = (testevaluatingscore + marks)/2;
+    }
     
     function presentscore() public view returns(uint){
         return score;
+    }
+
+    function myaddress() public view returns(address){
+        return student;
     }
 }
 
@@ -58,7 +72,6 @@ contract TestFactory{
     }
 
 }
-
 
 contract Test {
     mapping(address => bool) public attende;

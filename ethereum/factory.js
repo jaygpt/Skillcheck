@@ -3,7 +3,7 @@ import College from './build/College.json';
 
 const instance = new web3.eth.Contract(
   JSON.parse(College.interface),
-  '0x54A22b31d1EaA6B494694380A012f364B81a02AA'
+  '0x4527eE10F3aB0ED75535A37D54F74fD64e508f3F'
 );
 //console.log(instance);
 export default instance;

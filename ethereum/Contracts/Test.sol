@@ -4,7 +4,7 @@ contract TestFactory{
     address[] myaddress;
 
     mapping(address => string) Instructions;
-    function createwallet(string Instruction) public{
+    function creatorTest(string Instruction) public{
         address newwalletaddress = new Test(msg.sender);
         myaddress.push(newwalletaddress);
         Instructions[newwalletaddress] = Instruction;
@@ -19,7 +19,6 @@ contract TestFactory{
     }
 
 }
-
 
 contract Test {
     mapping(address => bool) public attende;

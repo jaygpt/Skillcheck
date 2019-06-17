@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import Layout from '../../components/Layout';
-import { Form, Button, Input } from 'semantic-ui-react';
+import { Form, Button, Input , Message} from 'semantic-ui-react';
 import factory from '../../ethereum/factory';
 import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
@@ -21,10 +21,10 @@ class CampaignNew extends Component {
         const accounts = await web3.eth.getAccounts();
         console.log(accounts);
         accounts.push(0xdE4996d020808f261c13eab13Ff04FF744aE7d57);
-        await factory.methods.createwallet().send({
+        await factory.methods.createwallet(String(this.state.name)).send({
           from: accounts[0]
         });
-        Router.pushRoute('/test/test');
+        Router.pushRoute('/');
       } catch (error) {
         this.setState({ errorMessage: err.message });
       }
