@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Input, Message, Button } from 'semantic-ui-react';
 import Campaign from '../ethereum/Test';
 import web3 from '../ethereum/web3';
+import { Link, Router } from '../routes';
 
 class EnrollForm extends Component {
   state = {
@@ -12,20 +13,25 @@ class EnrollForm extends Component {
 // incomplete
   onSubmit = async (event) => {
     event.preventDefault();
+    this.setState({ loading: true, errorMessage: '' });
     const campaign = Campaign(this.props.address);
     try {
-      //const accounts = await web3.eth.getAccounts();
+      const accounts = await web3.eth.getAccounts();
       //sending answer to be complete
-      //await campaign.methods.answermytest().call();
-      console.log(this.state.wallet_address);
-    } catch (err) {}
+      await campaign.methods.enrollintest(this.state.wallet_address).send({
+        from: accounts[0]
+      });
+    } catch (err) {
+      this.setState({ errorMessage: err.message });
+    }
+    this.setState({ loading: false });
   };
 
   render() {
     return (
       <Form onSubmit={this.onSubmit}>
         <Form.Field>
-          <label>Question to answer:</label>
+          <label>Enroll Yourself for Test:</label>
           <Input
             value = {this.setState.wallet_address}
             onChange={event => this.setState({ wallet_address: event.target.value })}
@@ -33,7 +39,8 @@ class EnrollForm extends Component {
             labelPosition = "right"
           />
         </Form.Field>
-        <Button primary>Submit answer!</Button>
+        <Message error header="Oops!" content={this.state.errorMessage} />
+        <Button loading={this.state.loading} primary>Enroll!</Button>
       </Form>
     );
   }

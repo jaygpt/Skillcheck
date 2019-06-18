@@ -20,7 +20,7 @@ class CampaignIndex extends Component {
       //console.log(Instruction);
     }
     //console.log(typeof(Instruction));
-    return { campaigns , Instruction};
+    return { campaigns , Instruction };
   }
 
   renderCampaigns() {

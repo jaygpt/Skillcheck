@@ -9,13 +9,16 @@ class CampaignShow extends Component {
         console.log(props.query.address);
         const campaign = Campaign(props.query.address);
         const score = await campaign.methods.presentscore().call();
+        const myadd = await campaign.methods.myaddress().call();
         console.log(score);
         return {
+          add: myadd,
           myscore: score
         };
       }
     renderCards() {
         const {
+          add,
           myscore,
         } = this.props;
 
@@ -25,6 +28,13 @@ class CampaignShow extends Component {
             meta: 'Address of Manager',
             description:
               'Score of your Skill in Programming',
+            style: { overflowWrap: 'break-word' }
+          },
+          {
+            header: add,
+            meta: 'My account addresss',
+            description:
+              'My account address',
             style: { overflowWrap: 'break-word' }
           },
           {
