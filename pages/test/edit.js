@@ -14,10 +14,34 @@ class CampaignShow extends Component {
     
     static async getInitialProps(props) {
         const { address } = props.query;
-
-        return { address }
+        const campaign = Campaign(props.query.address);
+        const Studadd = await campaign.methods.StudentsAddress().call();
+        const count = Studadd.length;
+        const quest = await campaign.methods.numberofQ().call();
+        //sendresponse
+        const Responses = [];
+        var i,j;
+        for(i=0;i<count;i++){
+          const addres = Studadd[i];
+          const mytest = [];
+          for(j = 0;j<quest;j++){
+            const detail = await campaign.methods.sendresponse(addres,j).call();
+            const myres = {
+              hisaddress: addres,
+              question: detail[0],
+              answer: detail[1]
+            }
+            mytest.push(myres);
+          }
+          Responses.push(mytest);
+        }
+        console.log(Responses);
+        console.log(Studadd);
+        // return properly
+        return { address,Responses }
       }
     
+    // add dot render function for render respnses and add Prob paper
     onSubmit = async event => {
         event.preventDefault();
         this.setState({ loading: true, errorMessage: '' });

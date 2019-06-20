@@ -1,9 +1,9 @@
 import web3 from './web3';
-import Test from './build/TestFactory.json';
+import Test from './build2/TestFactory.json';
 
 const instance = new web3.eth.Contract(
   JSON.parse(Test.interface),
-  '0x3B30fD65fB7F419d4352265c03efA23329423e84'
+  '0xDea06D482cDEC35d9503404Fb0E9D7959aA87032'
 );
 //console.log(instance);
 export default instance;

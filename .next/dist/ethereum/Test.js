@@ -8,7 +8,7 @@ var _web = require('./web3');
 
 var _web2 = _interopRequireDefault(_web);
 
-var _Test = require('./build/Test.json');
+var _Test = require('./build2/Test.json');
 
 var _Test2 = _interopRequireDefault(_Test);
 

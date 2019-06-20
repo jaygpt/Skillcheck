@@ -21,6 +21,10 @@ class EnrollForm extends Component {
       await campaign.methods.enrollintest(this.state.wallet_address).send({
         from: accounts[0]
       });
+      
+      await campaign.methods.enrollintest(this.state.wallet_address).send({
+        from: accounts[0]
+      });
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }

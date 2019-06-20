@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button ,Card} from 'semantic-ui-react';
 import { Link } from '../../../routes';
 import Layout from '../../../components/Layout';
+import Submitresponse from '../../../components/giveresponse';
 import Campaign from '../../../ethereum/Test';
 import web3 from '../../../ethereum/web3';
 
@@ -73,6 +74,7 @@ class Response extends Component {
             </a>
           </Link>
           {this.renderCampaigns()}
+          
         </div>
       </Layout>
     );

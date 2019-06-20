@@ -1,6 +1,6 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
 const Web3 = require('web3');
-const Test = require('./build/TestFactory.json');
+const Test = require('./build2/TestFactory.json');
 
 const provider = new HDWalletProvider(
   'tornado drift hold side supreme either supreme nurse stem deal rack orange',
