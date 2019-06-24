@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Card } from 'semantic-ui-react';
 
 import Layout from '../../components/Layout';
-import Campaign from '../../ethereum/wallet';
+import Wallet from '../../ethereum/wallet';
 
 class CampaignShow extends Component {
     static async getInitialProps(props) {
         console.log(props.query.address);
-        const campaign = Campaign(props.query.address);
+        const campaign = Wallet(props.query.address);
         const score = await campaign.methods.presentscore().call();
         const myadd = await campaign.methods.myaddress().call();
         console.log(score);

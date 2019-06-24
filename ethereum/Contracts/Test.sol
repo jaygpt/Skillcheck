@@ -128,8 +128,7 @@ contract Test {
     function enrollintest(address walletaddress) public {
         require(!attende[walletaddress]);
         attende[walletaddress] = true;
-        studentswallet.push(walletaddress);
-        
+        studentswallet.push(walletaddress); 
         questionanswer[] storage mytest;
         for(uint i = 0; i<questioncount; i++){
             questionanswer memory newquestion = questionanswer({
@@ -213,5 +212,9 @@ contract Test {
     
     function sendresponse(address studentwallet,uint index) public view returns(string,string){
         return (exam[studentwallet][index].question , exam[studentwallet][index].answer);
+    }
+    
+    function sendmarks(address studentwallet, uint index) public view returns(address,int[]){
+        return (grading[studentwallet][index].evaluator , grading[studentwallet][index].marksbyme);
     }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Message, Button } from 'semantic-ui-react';
 import Campaign from '../ethereum/Test';
+import Wallet from '../ethereum/Test';
 import web3 from '../ethereum/web3';
 import { Link, Router } from '../routes';
 
@@ -18,13 +19,21 @@ class EnrollForm extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
       //sending answer to be complete
+      const mywallet = Wallet(this.props.wallet_address);
+      const examiner = campaign.methods.examineradd().call();
+
       await campaign.methods.enrollintest(this.state.wallet_address).send({
         from: accounts[0]
       });
       
-      await campaign.methods.enrollintest(this.state.wallet_address).send({
+      await campaign.methods.starteval(this.state.wallet_address).send({
         from: accounts[0]
       });
+
+      await mywallet.methods.Setadmin(examiner).send({
+        from: accounts[0]
+      })
+
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }

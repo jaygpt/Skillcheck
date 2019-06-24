@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import Campaign from '../../ethereum/Test';
 import Layout from '../../components/Layout';
-import { Form, Button, Input ,Message } from 'semantic-ui-react';
+import { Form, Button, Input ,Message, Card, Grid} from 'semantic-ui-react';
 import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
+import Prob from '../../components/prob';
+
 
 class CampaignShow extends Component {
     state = {
         question : '',
         errorMessage: '',
+        errormessage: '',
         loading: false
     };
     
@@ -35,12 +38,35 @@ class CampaignShow extends Component {
           }
           Responses.push(mytest);
         }
-        console.log(Responses);
-        console.log(Studadd);
+        console.log(Responses[0]);
         // return properly
-        return { address,Responses }
+        return { 
+          address,
+          Responses 
+        }
       }
     
+    renderCampaigns() {
+      const items = []
+      var l = 0;
+      for(l = 0;l< this.props.Responses.length;l++){
+        var k;
+        for(k=0;k<this.props.Responses[l].length;k++){
+          const thisitem = {
+            header: this.props.Responses[l][k].question,
+            meta: this.props.Responses[l][k].hisaddress,
+            description: (
+            <p>
+              {this.props.Responses[l][k].answer}
+            </p>
+            ),
+            fluid: true
+          };
+          items.push(thisitem);
+        }
+      }
+      return <Card.Group items={items} />;
+      }
     // add dot render function for render respnses and add Prob paper
     onSubmit = async event => {
         event.preventDefault();
@@ -58,15 +84,41 @@ class CampaignShow extends Component {
         }
         this.setState({ loading: false });
       };
-
+ /// error : edit.js is not working properly  
+      onsubmit = async event =>{
+        event.preventDefault();
+        this.setState({ errormessage: '' });
+        try {
+          const campaign = Campaign(this.props.address);
+          const accounts = await web3.eth.getAccounts();
+          const examiner = campaign.methods.examineradd().call();
+          if(examiner == accounts[0]){
+            Router.pushRoute(`/test/at/${this.props.address}/finalize`);
+          }else{
+            this.setState({ errormessage: 'You are not examiner' });
+          }
+        } catch (err) {
+          this.setState({ errormessage: err.message });
+        }
+      }
   render() {
     return (
         <Layout>
             <h3>Add new question if you are examiner</h3>
-    
+            <Grid>
+            <Grid.Column width = {10}>
+            {this.renderCampaigns()}
+
+            <Form onSubmit = {this.onsubmit}>
+            <Message error header="Oops!" content={this.state.errormessage} />
+            <Button primary >Finalize Marks</Button>
+            </Form>
+
+            </Grid.Column>
+            <Grid.Column width={6}>
             <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
               <Form.Field>
-                <label>Add Question</label>
+                <label>Add Questions</label>
                 <Input 
                     label = "string"
                     labelPosition = "right"
@@ -76,8 +128,12 @@ class CampaignShow extends Component {
                 />
               </Form.Field>
               <Message error header="Oops!" content={this.state.errorMessage} />
-              <Button loading={this.state.loading} primary >Create!</Button>
+              <Button loading={this.state.loading} primary >Add!</Button>
             </Form>
+            <Prob address = {this.props.address} />            
+            
+            </Grid.Column>
+            </Grid>
           </Layout>
         );
   }
