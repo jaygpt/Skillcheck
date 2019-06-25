@@ -91,10 +91,13 @@ class CampaignShow extends Component {
         try {
           const campaign = Campaign(this.props.address);
           const accounts = await web3.eth.getAccounts();
-          const examiner = campaign.methods.examineradd().call();
+          const examiner = await campaign.methods.examineradd().call();
+          console.log(examiner);
           if(examiner == accounts[0]){
+            console.log('tRUE');
             Router.pushRoute(`/test/at/${this.props.address}/finalize`);
           }else{
+            console.log('False');
             this.setState({ errormessage: 'You are not examiner' });
           }
         } catch (err) {
@@ -109,7 +112,7 @@ class CampaignShow extends Component {
             <Grid.Column width = {10}>
             {this.renderCampaigns()}
 
-            <Form onSubmit = {this.onsubmit}>
+            <Form onSubmit = {this.onsubmit} error={!!this.state.errormessage}>
             <Message error header="Oops!" content={this.state.errormessage} />
             <Button primary >Finalize Marks</Button>
             </Form>

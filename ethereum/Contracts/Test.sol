@@ -46,8 +46,8 @@ contract Wallet {
         require(admin != student);
         score = (score + marks)/2;
     }
-    function setscoreeval(uint marks) public{
-        require(msg.sender == admin);
+    function setscoreeval(uint marks, address wallet) public{
+        require(wallet == admin);
         require(admin != student);
         testevaluatingscore = (testevaluatingscore + marks)/2;
     }
@@ -91,7 +91,6 @@ contract Test {
     }
     mapping(address => Marksbyme[]) grading;
     // student to graders
-    mapping(address => bool) grader;
     address[] studentswallet;
     address examiner;
     string[] public Questionset;
@@ -142,11 +141,10 @@ contract Test {
     }
     
     function starteval(address walletaddress) public{
-        require(!grader[walletaddress]);
         Marksbyme[] storage mymarks;
         grading[walletaddress] = mymarks;
-        grader[walletaddress] = true;
     }
+    
     function answermytest(address walletaddress,uint index,string answer) public {
         require(attende[walletaddress]);
         questionanswer[] storage mytest = exam[walletaddress];
@@ -164,16 +162,17 @@ contract Test {
                 }
         }
         if(!flag){
-            int[] storage newscore;
-            for(j = 0;j < questioncount;j++){
-                newscore.push(-1);
+            int[] memory newscore = new int[](questioncount);
+            uint k;
+            for(k = 0;k < questioncount;k++){
+                newscore[k] = -1;
             }
             Marksbyme memory newe1 = Marksbyme({
                 evaluator: walletaddress,
                 marksbyme: newscore
             });
             marks.push(newe1);
-            
+            grading[roll] = marks;
         }
         
     }
@@ -181,16 +180,12 @@ contract Test {
     function givemarks(address roll, address Mywallet, int marks,uint index) restricted2  public {
         require(!(msg.sender == examiner));
         Marksbyme[] storage mymarks = grading[roll];
-        Marksbyme memory edit;
-        if(grader[Mywallet]){
         uint i;
         for(i = 0;i< mymarks.length;i++){
             Marksbyme storage thism = mymarks[i];
             if(thism.evaluator == Mywallet){
-                edit = thism;
+                thism.marksbyme[index] = marks;
             }
-        }     
-        edit.marksbyme[index] = marks;
         }
     }
     
@@ -210,10 +205,13 @@ contract Test {
         return questioncount;
     }
     
-    function sendresponse(address studentwallet,uint index) public view returns(string,string){
-        return (exam[studentwallet][index].question , exam[studentwallet][index].answer);
+    function sendresponse(address studentwallet,uint index) public view returns(string,string,int){
+        return (exam[studentwallet][index].question , exam[studentwallet][index].answer, exam[studentwallet][index].marksbyevaluator);
     }
     
+    function number_of_evaluator(address studentwallet) public view returns(uint length){
+        return grading[studentwallet].length;
+    }
     function sendmarks(address studentwallet, uint index) public view returns(address,int[]){
         return (grading[studentwallet][index].evaluator , grading[studentwallet][index].marksbyme);
     }

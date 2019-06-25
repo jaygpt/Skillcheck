@@ -3,7 +3,7 @@ import Test from './build2/TestFactory.json';
 
 const instance = new web3.eth.Contract(
   JSON.parse(Test.interface),
-  '0xDea06D482cDEC35d9503404Fb0E9D7959aA87032'
+  '0x0FefC7d92677BaCaea09A11b027844972c89FB1a'
 );
 //console.log(instance);
 export default instance;

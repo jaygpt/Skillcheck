@@ -19,7 +19,7 @@ const deploy = async () => {
   )
     .deploy({ data: '0x' + Test.bytecode, arguments: ['Hi there!'] })
 
-    .send({ gas: '2000000', from: accounts[0] });
+    .send({ gas: '2500000', from: accounts[0] });
 
   console.log('Contract deployed to', result.options.address);
 };
