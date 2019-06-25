@@ -30,9 +30,7 @@ class EnrollForm extends Component {
         from: accounts[0]
       });
 
-      await mywallet.methods.Setadmin(examiner).send({
-        from: accounts[0]
-      })
+
 
     } catch (err) {
       this.setState({ errorMessage: err.message });

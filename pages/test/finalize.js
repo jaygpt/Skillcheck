@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Grid ,Button} from 'semantic-ui-react';
+import { Card, Grid ,Button, Form} from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import Campaign from '../../ethereum/Test';
 import factory from '../../ethereum/factory2';
@@ -7,6 +7,8 @@ import ContributeForm from '../../components/answer';
 import EnrollForm from '../../components/enroll';
 import { Link, Router } from '../../routes';
 import Attempt from '../../components/testattempt';
+import Wallet from '../../ethereum/wallet';
+
 
 class CampaignShow extends Component {
   static async getInitialProps(props) {
@@ -20,26 +22,39 @@ class CampaignShow extends Component {
         var marks = [];
         var i,j;
         var marksofevaluator = [];
-        console.log(Students);
+        //console.log(Students);
         for(i=0;i<Students.length;i++){
           const numberofevaluter = await campaign.methods.number_of_evaluator(Students[i]).call();
           var marksg = [];
-          console.log(numberofevaluter);
+          //console.log(numberofevaluter);
           for(j = 0;j<numberofevaluter;j++){
             const detail = await campaign.methods.sendmarks(Students[i],j).call();
             var bais = 0;
             var marksg2 = [];
             var m;
-            console.log(detail);
-            for(m = 0;m<detail[1].length;m++){
+            var lengtha = 0;
+            //console.log(detail);
+            for(m = 0;m<questioncount;m++){
               //console.log(props.query.address);
               const marksprob = await campaign.methods.sendresponse(Students[i],m).call();
-              //console.log(marksprob);
-              if(marksprob[2] != -1){
-                bais = (bais + marksprob[2] - detail[1][k])/2;
+              //console.log(typeof(marksprob[2]));
+              if(marksprob[2] != '-1'){
+                
+                bais = (bais + parseInt(marksprob[2],10) - parseInt(detail[1][m],10));
+                lengtha++;
+                //console.log(bais);
               }
-              marksg2.push(detail[1][k]);
+              var gh = parseInt(detail[1][m],10);
+              marksg2.push(gh);
             }
+            
+            for(var k = 0;k<questioncount;k++){
+              if(lengtha > 0){
+                marksg2[k] = marksg2[k] + bais/lengtha;
+              }
+            }
+            marksg.push(marksg2);
+            //console.log(marksg);
             if(bais<0){bais = bais*(-1)}
             var flag = false;
             for(m = 0;m<marksofevaluator.length;m++){
@@ -55,10 +70,6 @@ class CampaignShow extends Component {
               }
               marksofevaluator.push(newscore);
             }
-            for(var k = 0;k<detail[1].length;k++){
-              marksg2[k] = marksg2[k] + bais;
-            }
-            marksg.push(marksg2);
           }
           var final_score = [];
           for(var k = 0 ; k<questioncount;k++){
@@ -70,62 +81,87 @@ class CampaignShow extends Component {
           }
           marks.push(final_score);
         }
+        //console.log(marksofevaluator);
         //console.log(marks);
+        var consta = [];
+        for(var i = 0;i<marks.length;i++){
+          const thisa = marks[i];
+          var sum = 0;
+          for(var l = 0;l<thisa.length;l++)
+          {
+            sum = sum + thisa[l];
+          }
+          const maarks = {
+            addre: Students[i],
+            sum: sum
+          }
+          consta.push(maarks);
+          
+        }
+        console.log(consta);
         return {
+          consta : consta,
           marks_final: marks,
           marks_of_eval: marksofevaluator,
           Studentscount: Students.length,
           number: questioncount,
           address: props.query.address,
           examineradd: examiner,
-          instructions: inst
+          instructions: inst,
+          Student : Students
         };
       }
-      
+      onSubmit = async event => {
+        event.preventDefault();
+        console.log(this.props.examineradd);
+        for(var i = 0;i<this.props.consta.length;i++){
+          const mywallet = Wallet(this.props.consta[i].addre);
+          await mywallet.methods.setscoretest(this.props.consta[i].sum).send({
+            from: this.props.examineradd
+          });
+        }
+        for(var i = 0;i<this.props.marks_of_eval;i++ ){
+          const mywallet = Wallet(this.props.marks_of_eval[i].addr);
+          await mywallet.methods.setscoretest(this.props.marks_of_eval[i].mark).send({
+            from: this.props.examineradd
+          });
+        }
+      }
+      newrender(){
+        const items = this.props.consta.map(details => {
+          const add = details.addre;
+          return {
+            header: add,
+            description: details.sum,
+            fluid: true
+          };
+        });
+    
+        return <Card.Group items={items} />;
+      }
       renderCards() {
-    //     const {
-    //       Studentscount,
-    //       number,
-    //       address,
-    //       examineradd,
-    //       instructions
-    //     } = this.props;
-
-    //     const items = [
-    //       {
-    //         header: examineradd,
-    //         meta: 'Address of Examiner',
-    //         description:(
-    //           <Link route={`/test/at/${address}/addnew`}>
-    //             <a>'Examiner have right to  access your test-score'</a>
-    //           </Link>
-    //           ),
-    //         style: { overflowWrap: 'break-word' }
-    //       },
-    //       {
-    //         header: "Instruction",
-    //         meta: 'Read instruction carefuly',
-    //         description:
-    //           instructions,
-    //         style: { overflowWrap: 'break-word' }
-    //       },
-    //       {
-    //         header: number,
-    //         meta: 'Total Number of Question',
-    //         description:
-    //           'All are compulsory to answer',
-    //         style: { overflowWrap: 'break-word' }
-    //       },
-    //       {
-    //         header: Studentscount,
-    //         meta: 'Total Number of Students',
-    //         description:
-    //           'Number of Students enrolled in Test',
-    //         style: { overflowWrap: 'break-word' }
-    //       }
-    //     ];
-
-    //     return <Card.Group items={items} />;
+        const {
+          cosnta,
+          marks_final,
+          marks_of_eval,
+          Studentscount,
+          number,
+          address,
+          examineradd,
+          instructions,
+          Student
+        } = this.props;
+        
+        const items = this.props.marks_of_eval.map(details => {
+          const add = details.addr;
+          return {
+            header: add,
+            description: details.mark,
+            fluid: true
+          };
+        });
+    
+        return <Card.Group items={items} />;
        }
     render() {
         return (
@@ -136,11 +172,14 @@ class CampaignShow extends Component {
             </Grid.Column>
           </Grid>
           <Grid>
-          <Link route={`/test/at/${this.props.address}/response`}>
-              <a>
-                <Button primary>Responses</Button>
-              </a>
-          </Link>
+            {this.renderCards()}
+            <h3>Marks</h3>
+            {this.newrender()}
+          <Form onSubmit={this.onSubmit}>
+            <a>
+              <Button primary>Finalize Score</Button>
+            </a>
+          </Form>
           </Grid>
         </Layout>
         );
