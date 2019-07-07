@@ -120,7 +120,7 @@ class CampaignShow extends Component {
             from: this.props.examineradd
           });
         }
-        for(var i = 0;i<this.props.marks_of_eval;i++ ){
+        for(var i = 0;i<this.props.marks_of_eval.length;i++ ){
           const mywallet = Wallet(this.props.marks_of_eval[i].addr);
           await mywallet.methods.setscoretest(this.props.marks_of_eval[i].mark).send({
             from: this.props.examineradd

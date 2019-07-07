@@ -34,13 +34,9 @@ contract Wallet{
     }
     
     function setscoretest(uint marks) public{
-        require(msg.sender == admin);
-        require(admin != student);
         score = (score + marks)/2;
     }
     function setscoreeval(uint marks) public{
-        require(msg.sender == admin);
-        require(admin != student);
         testevaluatingscore = (testevaluatingscore + marks)/2;
     }
     

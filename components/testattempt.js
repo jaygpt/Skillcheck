@@ -29,9 +29,9 @@ class Attempt extends Component {
               flag = true;
           }
       }
-      await mywallet.methods.Setadmin(examiner).send({
-        from: accounts[0]
-      });
+      // await mywallet.methods.Setadmin(examiner).send({
+      //   from: accounts[0]
+      // });
       console.log(flag);
       if(flag){
       Router.pushRoute(`/test/at/${this.props.address}/attempt`);

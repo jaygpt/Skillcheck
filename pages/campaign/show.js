@@ -24,7 +24,7 @@ class CampaignShow extends Component {
 
         const items = [
           {
-            header: myscore,
+            header: 3.5,
             meta: 'Address of Manager',
             description:
               'Score of your Skill in Programming',
@@ -38,8 +38,8 @@ class CampaignShow extends Component {
             style: { overflowWrap: 'break-word' }
           },
           {
-            header: 20,
-            meta: 'Address of Manager',
+            header: 1.3,
+            meta: 'score',
             description:
               'Score of your Skill in Evaluation of test in Programming',
             style: { overflowWrap: 'break-word' }
