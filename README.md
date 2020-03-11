@@ -10,3 +10,7 @@ examiners without doing effort of checking answerscript. We have implemented a b
 portal which reduces the effort of an examiner by crowd-sourcing the task of grading of using an
 algorithm that process certain desirably properties against strategic behavior. An allocation algorithm
 is presented, which can incentivise evaluators to evaluate exam paper.
+
+# THE PAPER HAS BEEN ACCEPTED BY IEEE ICBC(INTERNATIONAL CONFERENCE ON BLOCKCHAIN AND CRYPTOCURRENCY) 2020
+
+Link to the paper is given: http://arxiv.org/abs/2003.03540
